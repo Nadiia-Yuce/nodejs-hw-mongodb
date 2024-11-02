@@ -27,3 +27,14 @@ export const getContactByIdController = async (req, res) => {
     data,
   });
 };
+
+export const addContactController = async (req, res) => {
+  const data = await contactServices.addContact(req.body);
+  console.log(data);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data,
+  });
+};
