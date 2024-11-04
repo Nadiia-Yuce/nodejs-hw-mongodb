@@ -18,4 +18,14 @@ contactsRouter.put(
   ctrlWrapper(contactControllers.upsertContactController),
 );
 
+contactsRouter.patch(
+  '/:contactId',
+  ctrlWrapper(contactControllers.patchContactController),
+);
+
+contactsRouter.delete(
+  '/:contactId',
+  ctrlWrapper(contactControllers.deleteContactController),
+);
+
 export default contactsRouter;
