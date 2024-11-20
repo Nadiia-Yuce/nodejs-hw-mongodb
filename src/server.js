@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import router from './routers/index.js';
+import cookieParser from 'cookie-parser';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 // import { logger } from './middlewares/logger.js';
@@ -13,6 +14,7 @@ export function setupServer() {
 
   app.use(cors());
   app.use(express.json());
+  app.use(cookieParser());
 
   app.use(router);
 
