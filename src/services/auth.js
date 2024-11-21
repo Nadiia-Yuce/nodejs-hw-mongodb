@@ -8,6 +8,7 @@ import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/users.js';
 
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
+
   if (user) {
     throw createHttpError(409, 'Email in use');
   }
@@ -26,10 +27,6 @@ export const logInUser = async (payload) => {
   if (!user) throw createHttpError(404, 'User not found');
 
   const isEqual = await bcrypt.compare(payload.password, user.password);
-  console.log('payload:', payload.password);
-  console.log('hashed:', user.password);
-
-  console.log('isEqual:', isEqual);
 
   if (!isEqual) throw createHttpError(401, 'Unauthorized');
 
@@ -45,4 +42,8 @@ export const logInUser = async (payload) => {
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   });
+};
+
+export const logOutUser = async (sessionId) => {
+  await SessionCollection.deleteOne({ _id: sessionId });
 };

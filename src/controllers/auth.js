@@ -1,5 +1,5 @@
 import { ONE_DAY } from '../constants/users.js';
-import { logInUser, registerUser } from '../services/auth.js';
+import { logInUser, logOutUser, registerUser } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -31,4 +31,15 @@ export const logInUserController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const logOutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logOutUser(req.cookies.sessionId);
+  }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
 };
