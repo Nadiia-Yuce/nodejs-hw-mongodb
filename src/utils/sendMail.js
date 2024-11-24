@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import { env } from './env.js';
 import { SMTP } from '../constants/index.js';
-import createHttpError from 'http-errors';
 
 const transporter = nodemailer.createTransport({
   host: env(SMTP.SMTP_HOST),
@@ -13,9 +12,5 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendMail = async (options) => {
-  try {
-    return await transporter.sendMail(options);
-  } catch {
-    throw createHttpError(500, 'Failed to send the email, please try later.');
-  }
+  return await transporter.sendMail(options);
 };
