@@ -1,16 +1,16 @@
+import fs from 'node:fs/promises';
 import jwt from 'jsonwebtoken';
+import path from 'node:path';
 import bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
+import handlebars from 'handlebars';
 import createHttpError from 'http-errors';
 import { UserCollection } from '../db/models/User.js';
 import { SessionCollection } from '../db/models/Session.js';
 import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/users.js';
-import { env } from '../utils/env.js';
-import { sendMail } from '../utils/sendMail.js';
 import { SMTP, TEMPLATES_DIR } from '../constants/index.js';
-import handlebars from 'handlebars';
-import path from 'node:path';
-import fs from 'node:fs/promises';
+import { sendMail } from '../utils/sendMail.js';
+import { env } from '../utils/env.js';
+import { randomBytes } from 'crypto';
 
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
@@ -135,4 +135,32 @@ export const requestResetToken = async (email) => {
   } catch {
     throw createHttpError(500, 'Failed to send the email, please try later.');
   }
+};
+
+export const resetPassword = async (payload, sessionId) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, env('JWT_SECRET'));
+  } catch (error) {
+    if (error instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
+    throw error;
+  }
+
+  const user = await UserCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if (!user) throw createHttpError(404, 'User not found');
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await UserCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+
+  await SessionCollection.deleteOne({ _id: sessionId });
 };
