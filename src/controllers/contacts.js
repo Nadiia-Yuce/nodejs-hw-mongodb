@@ -4,6 +4,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseContactFilterParams } from '../utils/parseContactFilterParams.js';
 import { sortByList } from '../db/models/Contact.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -61,14 +62,23 @@ export const addContactController = async (req, res) => {
 
 export const upsertContactController = async (req, res) => {
   const { contactId: _id } = req.params;
-  const result = await contactServices.updateContact({
-    _id,
-    userId: req.user._id,
-    payload: req.body,
-    options: {
+  const photo = req.file;
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await contactServices.updateContact(
+    { _id, userId: req.user._id },
+    {
+      ...req.body,
+      photo: photoUrl,
+    },
+    {
       upsert: true,
     },
-  });
+  );
 
   const status = result.isNew ? 201 : 200;
 
@@ -77,17 +87,25 @@ export const upsertContactController = async (req, res) => {
     message: 'Contact successfully upserted',
     data: result,
   });
-
-  // console.log(req.body);
 };
 
 export const patchContactController = async (req, res) => {
   const { contactId: _id } = req.params;
-  const result = await contactServices.updateContact({
-    _id,
-    userId: req.user._id,
-    payload: req.body,
-  });
+  const photo = req.file;
+  // console.log(photo);
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await contactServices.updateContact(
+    {
+      _id,
+      userId: req.user._id,
+    },
+    { ...req.body, photo: photoUrl },
+  );
 
   if (!result) {
     throw createHttpError(404, 'Contact not found');
