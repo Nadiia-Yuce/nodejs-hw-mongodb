@@ -7,7 +7,10 @@
     "lint": "eslint src/**/*.js",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
   "keywords": [],
   "author": "Nadiia Yuce <soyka9616@gmail.com>",
@@ -15,6 +18,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@redocly/cli": "^1.25.14",
     "eslint": "^9.13.0",
     "globals": "^15.11.0",
     "nodemon": "^3.1.7",
@@ -27,6 +31,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "google-auth-library": "^9.15.0",
     "handlebars": "^4.7.8",
     "http-errors": "^2.0.0",
     "joi": "^17.13.3",

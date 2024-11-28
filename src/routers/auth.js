@@ -38,3 +38,14 @@ router.post(
   validateBody(authSchemes.resetPasswordSchema),
   ctrlWrapper(authControllers.resetPasswordController),
 );
+
+router.get(
+  '/get-oauth-url',
+  ctrlWrapper(authControllers.getGoogleOAuthUrlController),
+);
+
+router.post(
+  '/confirm-oauth',
+  validateBody(authSchemes.loginWithGoogleOAuthSchema),
+  ctrlWrapper(authControllers.loginWithGoogleController),
+);
