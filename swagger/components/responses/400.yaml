@@ -1,0 +1,34 @@
+description: Bad request
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - errors
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - path
+              - type
+              - context
+            properties:
+              message:
+                type: string
+                example: '"name" length must be at least 3 characters long'
+              path:
+                type: array
+                items:
+                  type: string
+                  example: ['name']

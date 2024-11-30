@@ -7,14 +7,13 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a documentation of contacts app
 tags:
-  # теги, що ви будете використовувати
   - name: Contacts
     description: Operations about users.
   - name: Auth
     description: Auth operations.
 servers:
   - url: http://localhost:3000
-  #посилання на задеплоєний сайт
+  - url: https://nodejs-hw-mongodb-a0oa.onrender.com
 paths:
   /contacts:
     get:
@@ -24,6 +23,8 @@ paths:
   /contacts/{contactId}:
     get:
       $ref: ../swagger/paths/contacts/{contactId}/get.yaml
+    patch:
+      $ref: ../swagger/paths/contacts/{contactId}/patch.yaml
 components:
   securitySchemes:
     bearerAuth:
