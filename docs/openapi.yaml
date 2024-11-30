@@ -25,6 +25,8 @@ paths:
       $ref: ../swagger/paths/contacts/{contactId}/get.yaml
     patch:
       $ref: ../swagger/paths/contacts/{contactId}/patch.yaml
+    put:
+      $ref: ../swagger/paths/contacts/{contactId}/put.yaml
 components:
   securitySchemes:
     bearerAuth:

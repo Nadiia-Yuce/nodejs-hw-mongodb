@@ -1,18 +1,22 @@
 tags:
   - Contacts
-summary: Create a contact
-operationId: createContact
-description: 'Create a contact with payload'
+summary: Update contact
+operationId: putContact
+description: 'Update contact'
 security:
   - bearerAuth: []
+parameters:
+  - in: path
+    name: contactId
+    required: true
+    schema:
+      type: string
+      example: '65ca67e7ae7f10c88b598384'
 requestBody:
   content:
     multipart/form-data:
       schema:
         type: object
-        required:
-          - name
-          - phoneNumber
         properties:
           name:
             description: "Contact's name"
@@ -43,8 +47,28 @@ requestBody:
             type: string
             format: binary
 responses:
+  '200':
+    description: 'Contact successfully updated'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a contact
+            data:
+              type: object
+              $ref: '../../../components/schemas/contact.yaml'
   '201':
-    description: Creates a contact
+    description: 'New contact created'
     content:
       application/json:
         schema:
@@ -59,13 +83,13 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created a contact!
+              example: 'Successfully upserted a contact!'
             data:
               type: object
-              $ref: '../../components/schemas/contact.yaml'
+              $ref: '../../../components/schemas/contact.yaml'
   '400':
-    $ref: ../../components/responses/400.yaml
+    $ref: ../../../components/responses/400.yaml
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: '../../../components/responses/401.yaml'
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: '../../../components/responses/500.yaml'

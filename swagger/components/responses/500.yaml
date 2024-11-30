@@ -1,4 +1,4 @@
-description: Unauthorized error
+description: Internal server error
 content:
   application/json:
     schema:
@@ -9,7 +9,7 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 500
         message:
           type: string
-          example: 'Session not found'
+          example: 'ctrl is not a function'
