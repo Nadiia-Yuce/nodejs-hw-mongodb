@@ -39,13 +39,6 @@ parameters:
       type: boolean
       example: true
     description: 'Whether is contact in favourites'
-  - in: query
-    name: contactType
-    schema:
-      type: string
-      enum: ['work', 'home', 'personal']
-      example: personal
-    description: 'Type of the contact'
 responses:
   '200':
     description: Successfully found contacts!
